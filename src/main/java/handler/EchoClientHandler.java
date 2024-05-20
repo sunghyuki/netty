@@ -2,16 +2,14 @@ package handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.concurrent.EventExecutorGroup;
 import java.nio.charset.Charset;
 
 public class EchoClientHandler extends ChannelInboundHandlerAdapter {
+
     @Override
-    public void channelActive(ChannelHandlerContext ctx) {
+    public void channelActive(ChannelHandlerContext ctx) throws InterruptedException {
         String sendMessage = "Hello, Netty!";
 
         ByteBuf messageBuffer = Unpooled.buffer();
@@ -23,6 +21,7 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
         builder.append("]");
 
         System.out.println(builder.toString());
+        Thread.sleep(3000);
         ctx.writeAndFlush(messageBuffer);
     }
 
@@ -46,7 +45,8 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();;
+        cause.printStackTrace();
+        ;
         ctx.close();
     }
 
